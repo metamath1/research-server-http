@@ -2,14 +2,16 @@ import arxiv
 import json
 import os
 from typing import List
-# from mcp.server.fastmcp import FastMCP
-from fastmcp import FastMCP  # 수정된 부분
+from mcp.server.fastmcp import FastMCP
+# from fastmcp import FastMCP  # 수정된 부분
 
 PAPER_DIR = "papers"
 
-# Initialize FastMCP server
-# localhost에서 배포하는 경우
-mcp = FastMCP("research")
+# FastMCP를 쓰는 경우
+# mcp = FastMCP("research-server-http")
+
+# mcp를 쓰는 경우
+mcp = FastMCP("research-server-http", host="0.0.0.0", port=8000)
 
 
 @mcp.tool()
@@ -193,4 +195,9 @@ def generate_search_prompt(topic: str, num_papers: int = 5) -> str:
 
 if __name__ == "__main__":
     # Initialize and run the server
-    mcp.run(transport='http', host="0.0.0.0", port=8000)  #
+    # FastMCP를 쓰는 경우
+    # mcp.run(transport='http', host="0.0.0.0", port=8000)  
+
+    # mcp를 쓰는 경우:https://github.com/modelcontextprotocol/python-sdk?tab=readme-ov-file#authentication
+    mcp.run(transport="streamable-http")
+
